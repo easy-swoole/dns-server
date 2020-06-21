@@ -7,31 +7,38 @@ namespace EasySwoole\DNSServer\Protocol;
 class Header
 {
     const OPCODE_STANDARD_QUERY = 0;
-    const OPCODE_INVERSE_QUERY = 1;
+    const OPCODE_INVERSE_QUERY  = 1;
     const OPCODE_STATUS_REQUEST = 2;
-    const RCODE_NO_ERROR = 0;
-    const RCODE_FORMAT_ERROR = 1;
-    const RCODE_SERVER_FAILURE = 2;
-    const RCODE_NAME_ERROR = 3;
+    const RCODE_NO_ERROR        = 0;
+    const RCODE_FORMAT_ERROR    = 1;
+    const RCODE_SERVER_FAILURE  = 2;
+    const RCODE_NAME_ERROR      = 3;
     const RCODE_NOT_IMPLEMENTED = 4;
-    const RCODE_REFUSED = 5;
-    private $id;
-    private $response;
-    private $opcode;
-    private $authoritative;
-    private $truncated;
-    private $recursionDesired;
-    private $recursionAvailable;
-    private $z = 0;
-    private $rcode;
+    const RCODE_REFUSED         = 5;
+    /*
+     * 会话标识
+     */
+    private $id;                    // TransactionID
 
-    private $questionCount;
+    /*
+     * 标志
+     */
+    private $response;              // QR
+    private $opcode;                // OPCODE
+    private $authoritative;         // AA
+    private $truncated;             // TC
+    private $recursionDesired;      // RD
+    private $recursionAvailable;    // RA
+    private $z = 0;                 // ZERO
+    private $rcode;                 // RCODE
 
-    private $answerCount;
-
-    private $nameServerCount;
-
-    private $additionalRecordsCount;
+    /*
+     * 数量
+     */
+    private $questionCount;         // 问题数
+    private $answerCount;           // 回答资源数
+    private $nameServerCount;       // 授权资源数
+    private $additionalRecordsCount;// 附加资源数
 
     public function getId()
     {
@@ -173,6 +180,7 @@ class Header
     public function setAnswerCount($answerCount)
     {
         $this->answerCount = (int) $answerCount;
+
         return $this;
     }
 
