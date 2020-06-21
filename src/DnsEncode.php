@@ -18,7 +18,14 @@ class DnsEncode
 {
     public static $info = '';
 
-    public static function start(Request $request)
+    /**
+     * 开始生成报文
+     *
+     * @param Request $request
+     *
+     * @return string
+     */
+    public static function start(Request $request) : string
     {
         $header        = self::header($request->getHeader());
         $question      = self::splicing($request->getBody()->getQueries(), true);
@@ -29,7 +36,14 @@ class DnsEncode
         return $header . $question . $answer . $authoritative . $additional;
     }
 
-    private static function header(Header $header)
+    /**
+     * 头部报文
+     *
+     * @param Header $header
+     *
+     * @return string
+     */
+    private static function header(Header $header) : string
     {
 
         $data = pack('nnnnnn', $header->getId(), self::flags($header), $header->getQuestionCount(), $header->getAnswerCount(), $header->getNameServerCount(), $header->getAdditionalRecordsCount());
@@ -39,7 +53,15 @@ class DnsEncode
         return $data;
     }
 
-    private static function splicing($resources, $isQueries = false)
+    /**
+     * 拼接正文
+     *
+     * @param array $resources
+     * @param bool  $isQueries
+     *
+     * @return string
+     */
+    private static function splicing(array $resources, $isQueries = false) : string
     {
         if ($isQueries) {
             $records = array_map('self::splicingQueries', $resources);
@@ -50,14 +72,28 @@ class DnsEncode
         return implode('', $records);
     }
 
-    private static function splicingQueries(Resources $resources)
+    /**
+     * 问题区域拼接
+     *
+     * @param Resources $resources
+     *
+     * @return string
+     */
+    private static function splicingQueries(Resources $resources) : string
     {
         $info = self::name($resources->getName());
 
         return $info . pack('nn', $resources->getType(), $resources->getClass());
     }
 
-    private static function splicingResources(Resources $resources)
+    /**
+     * 回答区域、授权区域、附加区域拼接
+     *
+     * @param Resources $resources
+     *
+     * @return string
+     */
+    private static function splicingResources(Resources $resources) : string
     {
         $info = self::name($resources->getName());
 
@@ -73,7 +109,13 @@ class DnsEncode
         return $info . $data;
     }
 
-
+    /**
+     * 地址拼接
+     *
+     * @param $name
+     *
+     * @return string
+     */
     private static function name($name)
     {
         if ('.' === $name) {
@@ -89,20 +131,17 @@ class DnsEncode
         return $res;
     }
 
-
-    private static function flags(Header $header)
+    /**
+     * flags拼接
+     *
+     * @param Header $header
+     *
+     * @return int
+     */
+    private static function flags(Header $header) : int
     {
 
-        $ss = 0 | ($header->isResponse() & 0) << 15
-            | ($header->getOpcode() & 1111) << 11
-            | ($header->isAuthoritative() & 1) << 10
-            | ($header->isTruncated() & 1) << 9
-            | ($header->isRecursionDesired() & 1) << 8
-            | ($header->isRecursionAvailable() & 1) << 7
-            | ($header->getZ() & 111) << 4
-            | ($header->getRcode() & 1111);
-
-        return $ss;
+        return 0 | ($header->isResponse() & 0) << 15 | ($header->getOpcode() & 1111) << 11 | ($header->isAuthoritative() & 1) << 10 | ($header->isTruncated() & 1) << 9 | ($header->isRecursionDesired() & 1) << 8 | ($header->isRecursionAvailable() & 1) << 7 | ($header->getZ() & 111) << 4 | ($header->getRcode() & 1111);
     }
 
 }
