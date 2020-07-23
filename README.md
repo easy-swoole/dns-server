@@ -8,25 +8,10 @@
 <?php
 require 'vendor/autoload.php';
 $serv = new Swoole\Server("0.0.0.0", 53, SWOOLE_PROCESS, SWOOLE_SOCK_UDP);
-
+$dns = new EasySwoole\DNSServer\Server();
 //监听数据接收事件
-$serv->on('Packet', function ($serv, $data, $clientInfo) {
-    $pkt = $data;
-    $pkt = unpack("C*", substr($pkt,13, strlen($pkt)-18));
-    $o = '';
-
-    // Now lets loop through the pkt and translate the response to human readable ASCII
-    foreach($pkt as $s){
-        // If it's less than 32, it's assumed to be a period
-        if($s < 32)
-            $o .= ".";
-        // If its more than 32 less than 127, it's seen as a regular character
-        elseif($s > 32 && $s < 127)
-            $o .= chr($s);
-        else
-            continue;
-    }
-    var_dump($o);
+$serv->on('Packet', function ($serv, $data, $clientInfo) use($dns){
+    $dns->onMessage($dns);
 });
 
 //启动服务器

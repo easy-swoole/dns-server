@@ -10,6 +10,12 @@ class Request
     protected $header;
 
 
+    public static function decode(string $raw):?Request
+    {
+        $request = new Request();
+        return  $request;
+    }
+
     function __construct()
     {
         if(!$this->body){
