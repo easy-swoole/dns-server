@@ -31,8 +31,10 @@ class Server
     {
         //解析出请求包体
         $request = Request::decode($data);
+        $cache = $this->config->getDnsCache();
+        //判断本地是否存在该域名的Cache记录，如果存在则响应，否则就发送给指定的上级DNS服务器查询
 
-
+        $upDns = $this->config->getUpDNS();
 
     }
 
