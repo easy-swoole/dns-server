@@ -44,7 +44,7 @@ class Config
      */
     public function getDnsCache(): DnsCacheInterface
     {
-        if($this->dnsCache){
+        if(!$this->dnsCache){
             $this->dnsCache = new DnsCache();
         }
         return $this->dnsCache;
