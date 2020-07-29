@@ -20,6 +20,8 @@ class Config
     /** @var DnsCacheInterface */
     protected $dnsCache;
 
+    protected $cacheTtl = 86400;
+
     /**
      * @return ClientCacheInterface
      */
@@ -73,5 +75,26 @@ class Config
     public function setUpDNS(array $upDNS): void
     {
         $this->upDNS = $upDNS;
+    }
+
+    /**
+     * 获取设置的缓存时间
+     *
+     * @return int
+     */
+    public function getCacheTtl() :int
+    {
+        return $this->cacheTtl;
+    }
+
+    /**
+     * 设置缓存时间（单位秒）
+     * @param int $seconds
+     *
+     * @return int
+     */
+    public function setCacheTtl(int $seconds) :int
+    {
+        return $this->cacheTtl = $seconds;
     }
 }

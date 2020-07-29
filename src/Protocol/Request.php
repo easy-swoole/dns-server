@@ -8,9 +8,9 @@ use EasySwoole\DNSServer\Exception\DNSException;
 
 class Request
 {
-    private $body;  // 报正文对象
-    private $header;    // 报文头部对象
-    private $message; // DNS报文内容
+    private $body;        // 报正文对象
+    private $header;      // 报文头部对象
+    private $message;     // DNS报文内容
     private $offset = 12; // 解析报文字符位置,12是因为要忽略掉报文头部内容
     // 支持的解析类型
     private static $names = [
@@ -56,9 +56,9 @@ class Request
     }
 
     /**
-     * @return mixed
+     * @return Body
      */
-    public function getBody()
+    public function getBody() : Body
     {
         return $this->body;
     }
@@ -72,9 +72,9 @@ class Request
     }
 
     /**
-     * @return mixed
+     * @return Header
      */
-    public function getHeader()
+    public function getHeader() : Header
     {
         return $this->header;
     }
@@ -509,6 +509,15 @@ class Request
         }
 
         return $name;
+    }
+
+    /**
+     * 返回原始报文
+     * @return string
+     */
+    public function getMessage():string
+    {
+        return $this->message;
     }
 
 }
