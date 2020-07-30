@@ -38,7 +38,7 @@ class Resources
      */
     public function isQueries() : bool
     {
-        return $this->isQueries();
+        return $this->isQueries;
     }
 
     public function setName(string $name)

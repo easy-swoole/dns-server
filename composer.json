@@ -13,7 +13,8 @@
     ],
     "require": {
         "php": ">=7.1.0",
-        "easyswoole/socket": "^1.1"
+        "easyswoole/socket": "^1.1",
+        "ext-json": "*"
     },
     "autoload": {
         "psr-4": {
